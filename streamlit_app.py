@@ -12,7 +12,9 @@ streamlit.header('🍌🥭 Build Your Own Fruit Smoothie 🥝🍇')
 
 import pandas as pd
 
+# extract data 
 data = pd.read_csv('https://uni-lab-files.s3.us-west-2.amazonaws.com/dabw/fruit_macros.txt')
+data = data.set_index('Fruit')
 
 # create item picker
 # make pre-selection with Avocado and Strawberries
