@@ -19,7 +19,7 @@ data = data.set_index('Fruit')
 # create item picker
 # make pre-selection with Avocado and Strawberries
 selections = streamlit.multiselect('Pick some fruits: ', list(data.index), ['Avocado', 'Strawberries'])
-fruit_to_show = data.loc[~selections]
+fruit_to_show = data.loc[~data.index.isin(selections)]
 streamlit.text(selections)
 
 # display dataframe of fruit macro
