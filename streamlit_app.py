@@ -30,7 +30,6 @@ streamlit.header('Fruityvice Fruit Advices!')
 
 import requests
 fruityvice_response = requests.get('https://fruityvice.com/api/fruit/banana')
-streamlit.text(fruityvice_response.json())
 
 # Beatify fruityvice advice section
 fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
