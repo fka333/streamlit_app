@@ -24,3 +24,7 @@ streamlit.text(selections)
 
 # display dataframe of fruit macro
 streamlit.dataframe(fruit_to_show)
+
+import requests
+fruityvice_response = requests.get('https://fruityvice.com/api/fruit/banana')
+streamlit.text(fruity_response)
