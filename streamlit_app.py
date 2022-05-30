@@ -1,4 +1,8 @@
 import streamlit
+import pandas as pd
+import requests
+import snowflake.connector
+from urllib.error import URLError
 
 streamlit.title('Hello World!')
 
@@ -9,8 +13,6 @@ streamlit.text('🐔 Hard-Boiled Free-Range Egg')
 streamlit.text('🥑🍞 Avocado Toast')
 
 streamlit.header('🍌🥭 Build Your Own Fruit Smoothie 🥝🍇')
-
-import pandas as pd
 
 # extract data 
 data = pd.read_csv('https://uni-lab-files.s3.us-west-2.amazonaws.com/dabw/fruit_macros.txt')
@@ -28,21 +30,23 @@ streamlit.dataframe(fruit_to_show)
 # New section
 streamlit.header('Fruityvice Fruit Advices!')
 
-import requests
-fruit_choice = streamlit.text_input('What fruit do you want to have more information about?', 'kiwi')
-streamlit.write(f'The user has entered: {fruit_choice}')
-
-fruityvice_response = requests.get(f'https://fruityvice.com/api/fruit/{fruit_choice}')
-
-# Beatify fruityvice advice section
-fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
-# output as a table
-streamlit.dataframe(fruityvice_normalized)
-
+try:
+  fruit_choice = streamlit.text_input('What fruit do you want to have more information about?', 'kiwi')
+  if not fruit_choice:
+    streamlit.error('Please select one fruit to get information!')
+  else:
+    streamlit.write(f'The user has entered: {fruit_choice}')
+    fruityvice_response = requests.get(f'https://fruityvice.com/api/fruit/{fruit_choice}')
+    # Beatify fruityvice advice section
+    fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
+    # output as a table
+    streamlit.dataframe(fruityvice_normalized)
+except URLError as e:
+  streamlit.error()
+  
 # stop
 streamlit.stop()
 
-import snowflake.connector
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_cur = my_cnx.cursor()
 my_cur.execute("SELECT * FROM FRUIT_LOAD_LIST;")
