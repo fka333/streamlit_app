@@ -64,7 +64,7 @@ if streamlit.button('Get fruit load list'):
 # Allow end user to insert more fruit
 def insert_row_sf(new_fruit):
   with my_cnx.cursor() as my_cur:
-    my_cur.execute(f"insert into fruit_load_list values ('{new_fruit')");
+    my_cur.execute("insert into fruit_load_list values ('" + new_fruit + "');")
     return f'Thanks for adding {new_fruit}'
 
 add_my_fruit = streamlit.text_input('What fruit would you like to add?')
