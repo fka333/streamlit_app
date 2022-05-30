@@ -27,6 +27,12 @@ streamlit.text(selections)
 # display dataframe of fruit macro
 streamlit.dataframe(fruit_to_show)
 
+def get_fruityvice_data(this_fruit):
+  fruityvice_response = requests.get(f'https://fruityvice.com/api/fruit/{this_fruit}')
+  # Beatify fruityvice advice section
+  return pd.json_normalize(fruityvice_response.json())
+
+
 # New section
 streamlit.header('Fruityvice Fruit Advices!')
 
@@ -36,11 +42,9 @@ try:
     streamlit.error('Please select one fruit to get information!')
   else:
     streamlit.write(f'The user has entered: {fruit_choice}')
-    fruityvice_response = requests.get(f'https://fruityvice.com/api/fruit/{fruit_choice}')
-    # Beatify fruityvice advice section
-    fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
+    back_from_function = get_fruityvice_data(fruit_choice)
     # output as a table
-    streamlit.dataframe(fruityvice_normalized)
+    streamlit.dataframe(back_from_function)
 except URLError as e:
   streamlit.error()
   
